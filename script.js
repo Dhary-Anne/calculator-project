@@ -10,7 +10,7 @@ class Calculator {
         this.operation = undefined
     }
     delete(){
-        this,this.currentOperand = this.currentOperand.toString().slice(0,-1)
+        this.currentOperand = this.currentOperand.toString().slice(0, -1)
 
     }
     appendNumber(number){
@@ -18,16 +18,17 @@ class Calculator {
         this.currentOperand = this.currentOperand.toString() + number.toString()
 
     }
-    chooseOperation(){
+    chooseOperation(operation){
         if(this.currentOperand === '') return
         if(this.previousOperand !== ''){
             this.compute()
         }
-        this.operation = this.operation
+        this.operation = operation
         this.previousOperand = this.currentOperand
         this.currentOperand = ''
 
     }
+
     compute(){
         let computation
         const prev = parseFloat(this.previousOperand)
@@ -54,14 +55,32 @@ class Calculator {
        this.previousOperand = ''
 
     }
+
+    getDisplayNumber(number){
+        const stringNumber = number.toString()
+        const intergerDigits = parseFloat(stringNumber.split('.')[0])
+        const decimalDigits = stringNumber.split('.')[1]
+        let intergerDisplay
+        if(isNaN(intergerDigits)){
+            intergerDisplay = ''
+        }else {
+            intergerDisplay = intergerDigits.toLocaleString('en', {
+                maximumFractionDigits: 0 })
+        }
+        if(decimalDigits !=  null){
+            return `${intergerDisplay}.${decimalDigits}`
+        }
+        return intergerDisplay
+    }
     updateDisplay(){
-        this.currentOperandTextElement.innerText = this.currentOperand
+        this.currentOperandTextElement.innerText = 
+         this.getDisplayNumber(this.currentOperand)
         if(this.operation != null){ 
             this.previousOperandTextElement.innerText = 
-            `${this.previousOperand} ${this.operation}`
-
+            `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`
+        }else{
+            this.previousOperandTextElement.innerText = ''
         }
-
     }
 }
 
